@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <!-- Estilos de Animação CSS -->
+    <style>
+      .bg { fill: #f0f4f8; }
+      .wire { fill: none; stroke: #ff7300; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+      .text { font-family: system-ui, -apple-system, sans-serif; font-weight: bold; fill: #2c3e50; }
+      
+      /* Animação do Pulso/Bolinha */
+      .pulse {
+        fill: #00d2ff;
+        filter: drop-shadow(0px 0px 8px #00d2ff);
+        animation: moveAlongPath 4s linear infinite;
+      }
+
+      /* Animação do Brilho da Bomba */
+      .bomba-bg {
+        fill: #ffffff;
+        stroke: #d0d7de;
+        stroke-width: 3;
+        rx: 25;
+        transition: all 0.3s;
+        animation: glowBomba 4s linear infinite;
+      }
+
+      /* Caminho que a bolinha percorre (Sentido horário) */
+      @keyframes moveAlongPath {
+        0%   { transform: translate(400px, 80px); }   /* Perto do Resistor */
+        25%  { transform: translate(720px, 80px); }   /* Canto Sup Dir */
+        50%  { transform: translate(720px, 400px); }  /* Canto Inf Dir */
+        65%  { transform: translate(400px, 400px); }  /* Passando na Bomba! */
+        75%  { transform: translate(80px, 400px); }   /* Canto Inf Esquer */
+        85%  { transform: translate(80px, 80px); }    /* Amperímetro / Canto Sup Esquer */
+        100% { transform: translate(400px, 80px); }   /* Bateria / Volta ao início */
+      }
+
+      /* Acende a bomba exatamente quando a bolinha passa (entre 55% e 72% do tempo) */
+      @keyframes glowBomba {
+        0%, 50%, 75%, 100% {
+          fill: #ffffff;
+          stroke: #d0d7de;
+          filter: none;
+        }
+        60%, 68% {
+          fill: #fff3e0;
+          stroke: #ff9800;
+          filter: drop-shadow(0px 0px 15px #ff9800);
+        }
+      }
+    </style>
+  </defs>
+
+  <!-- Fundo -->
+  <rect class="bg" width="800" height="500" rx="15"/>
+
+  <!-- Trilha/Circuito Elétrico -->
+  <path class="wire" d="M 320 80 H 500 L 530 65 L 550 95 L 570 65 L 590 95 L 610 65 L 630 95 L 650 80 H 720 V 400 H 80 V 80 H 260" />
+
+  <!-- Bateria (136 V) -->
+  <g transform="translate(260, 40)">
+    <line x1="15" y1="20" x2="15" y2="60" stroke="#555" stroke-width="6"/>
+    <line x1="45" y1="0" x2="45" y2="80" stroke="#ff7300" stroke-width="8"/>
+    <text x="-5" y="30" class="text" font-size="28" fill="#e65100">-</text>
+    <text x="55" y="30" class="text" font-size="28" fill="#e65100">+</text>
+    <text x="0" y="-10" class="text" font-size="32">136 V</text>
+  </g>
+
+  <!-- Resistor (3,2 Ω) -->
+  <text x="520" y="35" class="text" font-size="30">3,2 Ω</text>
+
+  <!-- Amperímetro (A) -->
+  <g transform="translate(80, 240)">
+    <circle cx="0" cy="0" r="30" fill="#ff7300" />
+    <text x="-12" y="11" class="text" font-size="32" fill="#ffffff">A</text>
+  </g>
+
+  <!-- Componente Bomba -->
+  <g transform="translate(260, 360)">
+    <rect class="bomba-bg" x="0" y="0" width="280" height="80" />
+    <text x="75" y="52" class="text" font-size="38" fill="#2c3e50">Bomba</text>
+  </g>
+
+  <!-- Bolinha de Energia (Partícula) -->
+  <circle class="pulse" r="12" />
+</svg>
