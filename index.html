@@ -1,17 +1,245 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
-  <!-- Moldura de Fundo -->
-  <rect width="800" height="500" rx="15" fill="#f0f4f8"/>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador ENEM - Questão 120 (Circuito Fotovoltaico)</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #ff7300;
+      --text: #f8fafc;
+      --success: #22c55e;
+      --danger: #ef4444;
+    }
 
-  <!-- Embutimento do Vídeo -->
-  <foreignObject x="0" y="0" width="800" height="500">
-    <xhtml:video 
-      xmlns:xhtml="http://www.w3.org/1999/xhtml"
-      autoplay="true" 
-      loop="true" 
-      muted="true" 
-      playsinline="true" 
-      style="width: 100%; height: 100%; border-radius: 15px; object-fit: cover;">
-      <xhtml:source src="http://googleusercontent.com/generated_video_content/1958831262757125477" type="video/mp4" />
-    </xhtml:video>
-  </foreignObject>
-</svg>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 850px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      color: #38bdf8;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+
+    /* Tela do Circuito */
+    .circuit-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      margin-bottom: 20px;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Estilos SVG */
+    .wire { fill: none; stroke: var(--accent); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+    .text-svg { font-family: sans-serif; font-weight: bold; fill: #f8fafc; }
+    
+    .pulse {
+      fill: #00d2ff;
+      filter: drop-shadow(0px 0px 8px #00d2ff);
+      animation: moveAlongPath 3s linear infinite;
+    }
+
+    .bomba-bg {
+      fill: #334155;
+      stroke: #64748b;
+      stroke-width: 3;
+      rx: 20;
+      transition: all 0.5s ease;
+    }
+
+    /* Estado da bomba no circuito */
+    .bomba-ok { fill: #14532d; stroke: var(--success); filter: drop-shadow(0 0 15px #22c55e); }
+    .bomba-error { fill: #7f1d1d; stroke: var(--danger); filter: drop-shadow(0 0 15px #ef4444); }
+
+    @keyframes moveAlongPath {
+      0%   { transform: translate(400px, 80px); }
+      25%  { transform: translate(720px, 80px); }
+      50%  { transform: translate(720px, 400px); }
+      65%  { transform: translate(400px, 400px); }
+      75%  { transform: translate(80px, 400px); }
+      85%  { transform: translate(80px, 80px); }
+      100% { transform: translate(400px, 80px); }
+    }
+
+    /* Painel de Opções */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .btn-option {
+      background: var(--card);
+      border: 2px solid #334155;
+      color: var(--text);
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .btn-option:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* Feedback */
+    .feedback {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .feedback.active { display: block; }
+    .feedback-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 8px; }
+    .feedback.correct { border-left: 6px solid var(--success); }
+    .feedback.wrong { border-left: 6px solid var(--danger); }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>⚡ Simulador de Eletrodinâmica: ENEM Questão 120</h1>
+  <p class="subtitle">Selecione o circuito equivalente com o menor número de placas para fazer a bomba funcionar (100V ± 5V):</p>
+
+  <!-- Canvas/SVG Animado -->
+  <div class="circuit-card">
+    <svg viewBox="0 0 800 500">
+      <rect width="800" height="500" rx="15" fill="#0f172a"/>
+
+      <!-- Fios do Circuito -->
+      <path class="wire" d="M 320 80 H 500 L 530 65 L 550 95 L 570 65 L 590 95 L 610 65 L 630 95 L 650 80 H 720 V 400 H 80 V 80 H 260" />
+
+      <!-- Gerador (Bateria) -->
+      <g transform="translate(260, 40)">
+        <line x1="15" y1="20" x2="15" y2="60" stroke="#94a3b8" stroke-width="6"/>
+        <line x1="45" y1="0" x2="45" y2="80" stroke="var(--accent)" stroke-width="8"/>
+        <text x="0" y="-10" id="disp-v" class="text-svg" font-size="32">--- V</text>
+      </g>
+
+      <!-- Resistor Interno -->
+      <text x="520" y="35" id="disp-r" class="text-svg" font-size="30">--- Ω</text>
+
+      <!-- Amperímetro -->
+      <g transform="translate(80, 240)">
+        <circle cx="0" cy="0" r="30" fill="var(--accent)" />
+        <text x="-12" y="11" class="text-svg" font-size="32">A</text>
+      </g>
+
+      <!-- Bomba d'água -->
+      <g transform="translate(260, 360)">
+        <rect id="bomba-shape" class="bomba-bg" x="0" y="0" width="280" height="80" />
+        <text x="75" y="52" class="text-svg" font-size="36" id="bomba-text">Bomba</text>
+      </g>
+
+      <!-- Partícula de Elétrons -->
+      <circle class="pulse" r="12" />
+    </svg>
+  </div>
+
+  <!-- Botões de Opções da Questão -->
+  <div class="options-grid">
+    <button class="btn-option" onclick="testarCircuito('A', 136, 3.2)">A) 136V | 3,2Ω</button>
+    <button class="btn-option" onclick="testarCircuito('B', 120, 2.4)">B) 120V | 2,4Ω</button>
+    <button class="btn-option" onclick="testarCircuito('C', 120, 5.3)">C) 120V | 5,3Ω</button>
+    <button class="btn-option" onclick="testarCircuito('D', 102, 2.4)">D) 102V | 2,4Ω</button>
+    <button class="btn-option" onclick="testarCircuito('E', 102, 5.3)">E) 102V | 5,3Ω</button>
+  </div>
+
+  <!-- Caixa de Feedback -->
+  <div id="feedback" class="feedback">
+    <div id="feedback-title" class="feedback-title"></div>
+    <div id="feedback-body"></div>
+  </div>
+</div>
+
+<script>
+  function testarCircuito(opcao, v, r) {
+    // Atualiza valores no SVG
+    document.getElementById('disp-v').textContent = v + ' V';
+    document.getElementById('disp-r').textContent = r.toString().replace('.', ',') + ' Ω';
+
+    const bomba = document.getElementById('bomba-shape');
+    const bombaText = document.getElementById('bomba-text');
+    const feedback = document.getElementById('feedback');
+    const fbTitle = document.getElementById('feedback-title');
+    const fbBody = document.getElementById('feedback-body');
+
+    // Resolução lógica:
+    // Placa individual: r = (40 - 34)/7.5 = 0.8 Ω
+    // Para obter 100V de operação (34V/placa), precisamos de 3 placas em série:
+    // U = 3 * 34 = 102V (Operação perfeita)
+    // E_eq = 3 * 40V = 120V
+    // r_eq = 3 * 0.8Ω = 2.4Ω
+
+    feedback.className = 'feedback active';
+
+    if (opcao === 'B') {
+      bomba.className = 'bomba-bg bomba-ok';
+      bombaText.textContent = 'BOMBA LIGADA! 💧';
+      fbTitle.textContent = '✅ Resposta Correta! (Alternativa B)';
+      fbTitle.style.color = 'var(--success)';
+      fbBody.innerHTML = `
+        <p><b>Por que está certo?</b></p>
+        <ul>
+          <li><b>Resistência interna da placa:</b> $r = \\frac{40 - 34}{7,5} = 0,8\\,\\Omega$</li>
+          <li><b>Número de placas:</b> Com 3 placas em série, a tensão de operação fica $3 \\times 34\\text{V} = 102\\text{V}$ (dentro do limite de $95\\text{V}$ a $105\\text{V}$).</li>
+          <li><b>Gerador equivalente:</b> $\\varepsilon = 3 \\times 40\\text{V} = 120\\text{V}$ e $r_{eq} = 3 \\times 0,8\\,\\Omega = 2,4\\,\\Omega$.</li>
+        </ul>`;
+    } else {
+      bomba.className = 'bomba-bg bomba-error';
+      bombaText.textContent = opcao === 'A' ? '💥 SOBRETENSÃO!' : '❌ TENSÃO INSUFICIENTE';
+      fbTitle.textContent = `❌ Alternativa ${opcao} Incorreta`;
+      fbTitle.style.color = 'var(--danger)';
+      
+      if(opcao === 'A') {
+        fbBody.innerHTML = 'Você selecionou 4 placas em série (136V). Isso gera tensão em excesso e pode danificar o equipamento!';
+      } else if(opcao === 'D' || opcao === 'E') {
+        fbBody.innerHTML = '102V é a f.e.m. em circuito aberto de um número incorreto de placas. Em operação, a tensão cairia demais!';
+      } else {
+        fbBody.innerHTML = 'A resistência equivalente ou a força eletromotriz calculada não correspondem à associação ideal de placas.';
+      }
+    }
+  }
+</script>
+
+</body>
+</html>
